@@ -1,0 +1,23 @@
+INFO
+Teoría de la codificación
+
+
+
+abecedario
+
+entrada
+0 a 9
+
+a    b    c
+045 065  02356757
+
+
+árbol de hobman jerarquico es el primero
+
+y árbol de hobman balanceado es el segundo (el del tanteo)
+
+árbol de hubman termiario es el ultimo
+
+
+
+
