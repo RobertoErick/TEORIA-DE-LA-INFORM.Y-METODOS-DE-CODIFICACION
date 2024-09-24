@@ -1,0 +1,11 @@
+Método de Shanon
+	Método de expansión binaria
+	
+	Varianza acumulada
+
+El método de Shanon tiene la menor entropía pero la cantidad de comprensión es peor
+
+
+Método Shanon-Fano´s
+
+Método Shanon-Fano-Elias
