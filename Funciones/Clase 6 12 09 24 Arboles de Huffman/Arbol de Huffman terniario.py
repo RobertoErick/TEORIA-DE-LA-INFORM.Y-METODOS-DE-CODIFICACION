@@ -102,4 +102,4 @@ if __name__ == "__main__":
     
     # Graficar el árbol de Huffman
     dot = graficar_arbol_huffman(arbol_huffman_ternario)
-    dot.render("arbol_huffman_ternario", format="png", cleanup=False)  # Guardar en archivo PNG
+    dot.render("Arbol de Huffman terniario", format="png", cleanup=False)  # Guardar en archivo PNG
