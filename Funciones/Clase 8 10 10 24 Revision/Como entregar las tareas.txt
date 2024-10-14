@@ -1,0 +1,9 @@
+Como entregar las tareas
+
+información mutua y entropía
+canales y métodos de acoplamiento
+métodos de codificación (huffman shanon y demás)
+diccionario y detección de errores (campos de galoi)
+
+
+
