@@ -6,9 +6,17 @@ def arithmetic_encoder(text: str, word: str) -> None:
     frequencies = sort_and_order_frequencies(text)
     frequency_sum = sum(frequency[1] for frequency in frequencies)
     sorted_values = sorted(frequencies, key=lambda x: (not x[0].isalpha(), x[0]))
-    sorted_frequencies = [(i[0], i[1], round(i[1]/frequency_sum,4)) for i in sorted_values]
+    sorted_frequencies = [(i[0], i[1], i[1]/frequency_sum) for i in sorted_values]
     print(sorted_frequencies)
-    base_matrix = np.zeros(())
+    base_matrix = np.zeros((3, len(sorted_frequencies)))
+    for i in range(len(sorted_frequencies)):
+        base_matrix[0,i] = sorted_frequencies[i][2]
+        if i == 0:
+            base_matrix[1,i] = 0
+        else:
+            base_matrix[1,i] = base_matrix[2][i-1]
+        base_matrix[2,i] = base_matrix[0,i] + base_matrix[1,i]
+    print(base_matrix)
 
 
 def __run__():
