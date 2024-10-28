@@ -10,10 +10,7 @@ def arithmetic_encoder(text: str, word: str) -> tuple:
     base_matrix = np.zeros((3, len(sorted_frequencies)))
     for i in range(len(sorted_frequencies)):
         base_matrix[0,i] = sorted_frequencies[i][2]
-        if i == 0:
-            base_matrix[1,i] = 0
-        else:
-            base_matrix[1,i] = base_matrix[2][i-1]
+        base_matrix[1,i] = base_matrix[2,i-1] if i != 0 else 0
         base_matrix[2,i] = base_matrix[0,i] + base_matrix[1,i]
     new_matrix = np.zeros((3, len(sorted_frequencies)))
     iteration = 0
@@ -26,10 +23,7 @@ def arithmetic_encoder(text: str, word: str) -> tuple:
         for i in range(len(sorted_frequencies)):
             if iteration == 0:
                 new_matrix[0,i] = base_matrix[0, i] * base_matrix[0,char_index]
-                if i == 0:
-                    new_matrix[1,i] = base_matrix[1,char_index]
-                else:
-                    new_matrix[1,i] = new_matrix[2,i-1]
+                new_matrix[1,i] = new_matrix[2,i-1] if i != 0 else base_matrix[1,char_index]
                 new_matrix[2,i] = new_matrix[0,i] + new_matrix[1,i]
             else:
                 new_matrix[0,i] = base_matrix[0, i] * new_matrix[0,char_index]
@@ -75,7 +69,8 @@ def __run__():
     And that has made all the difference.
     """
     word = "could"
-    arithmetic_encoder(text, word)
+    l, alpha, beta = arithmetic_encoder(text, word)
+    method_one(l, alpha, beta)
 
 
 if __name__ == "__main__":
