@@ -1,23 +1,26 @@
 
 
-def binary_expansion(num: float):
-    num = num * 2
+def binary_expansion(num: float, tolerance: float = 1e-10):
+    num *= 2
     expansion = [(num, 0)]
-    history = [num]
+    history = {num}
+
     while True:
         if num >= 1:
             num = (num - 1) * 2
+            bit = 1
         else:
-            num = num * 2
-        if num >= 1:
-            expansion.append((num, 1))
-        else:
-            expansion.append((num, 0))
+            num *= 2
+            bit = 0
 
-        if num in history:
+        expansion.append((num, bit))
+
+        # Check for repeated numbers with a tolerance
+        if any(abs(num - h) < tolerance for h in history):
             break
         else:
-            history.append(num)
+            history.add(num)
+
     print(expansion)
 
 
