@@ -17,7 +17,6 @@ def binary_expansion(num: float, tolerance: float = 1e-10) -> list[int]:
             break
         else:
             history.append(num)
-    print(expansion)
     sequence = [num for _,num in expansion]
     return sequence
 
