@@ -1,7 +1,7 @@
-from numpy import ndarray
+import numpy as np
 
 from utils.utils import sort_and_order_frequencies
-import numpy as np
+from binary_expansion import expansion
 
 
 def arithmetic_encoder(text: str, word: str) -> tuple:
@@ -40,7 +40,7 @@ def arithmetic_encoder(text: str, word: str) -> tuple:
     return l, alpha, beta
 
 
-def method_one(l: np.float64, alpha: np.float64, beta: np.float64):
+def method_one(l: np.float64, alpha: np.float64, beta: np.float64) -> None:
     print(f"l : {l}")
     print(f"alpha : {alpha}")
     print(f"beta : {beta}")
@@ -54,9 +54,24 @@ def method_one(l: np.float64, alpha: np.float64, beta: np.float64):
             base_matrix.append((t,t_pow, 1))
             break
         t = t + 1
+    left_value = base_matrix[len(base_matrix) - 1][1]
+    mid_value = len(base_matrix)
+    right_value = 2 **(-mid_value + 1)
     print(f"base matrix : {base_matrix}")
-    print(f"t: {base_matrix[len(base_matrix) - 1][1]} <= {len(base_matrix)} <= {2 **(-len(base_matrix) + 1)}")
+    print(f"t: {left_value} <= {mid_value} <= {right_value}")
+    upper_x = 2 ** mid_value
+    left_x = upper_x * alpha
+    rounded_x = round(left_x)
+    initial_value = rounded_x / upper_x
+    expansion.binary_expansion(initial_value)
 
+
+def method_two(l: np.float64, alpha: np.float64, beta: np.float64) -> None:
+    print(f"l : {l}")
+    print(f"alpha : {alpha}")
+    print(f"beta : {beta}")
+    expansion.binary_expansion(float(alpha))
+    expansion.binary_expansion(float(beta))
 
 
 def __run__():
@@ -87,7 +102,10 @@ def __run__():
     """
     word = "could"
     l, alpha, beta = arithmetic_encoder(text, word)
+    print("Method 1")
     method_one(l, alpha, beta)
+    print("Method 2")
+    method_two(l, alpha, beta)
 
 
 if __name__ == "__main__":
