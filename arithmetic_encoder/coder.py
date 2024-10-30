@@ -1,7 +1,7 @@
-from numpy import ndarray
+import numpy as np
 
 from utils.utils import sort_and_order_frequencies
-import numpy as np
+from binary_expansion import expansion
 
 
 def arithmetic_encoder(text: str, word: str) -> tuple:
@@ -54,9 +54,16 @@ def method_one(l: np.float64, alpha: np.float64, beta: np.float64):
             base_matrix.append((t,t_pow, 1))
             break
         t = t + 1
+    left_value = base_matrix[len(base_matrix) - 1][1]
+    mid_value = len(base_matrix)
+    right_value = 2 **(-mid_value + 1)
     print(f"base matrix : {base_matrix}")
-    print(f"t: {base_matrix[len(base_matrix) - 1][1]} <= {len(base_matrix)} <= {2 **(-len(base_matrix) + 1)}")
-
+    print(f"t: {left_value} <= {mid_value} <= {right_value}")
+    upper_x = 2 ** mid_value
+    left_x = upper_x * alpha
+    rounded_x = round(left_x)
+    initial_value = rounded_x / upper_x
+    expansion.binary_expansion(initial_value)
 
 
 def __run__():
