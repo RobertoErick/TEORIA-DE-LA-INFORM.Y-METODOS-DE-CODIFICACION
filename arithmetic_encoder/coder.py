@@ -40,7 +40,7 @@ def arithmetic_encoder(text: str, word: str) -> tuple:
     return l, alpha, beta
 
 
-def method_one(l: np.float64, alpha: np.float64, beta: np.float64):
+def method_one(l: np.float64, alpha: np.float64, beta: np.float64) -> None:
     print(f"l : {l}")
     print(f"alpha : {alpha}")
     print(f"beta : {beta}")
@@ -64,6 +64,14 @@ def method_one(l: np.float64, alpha: np.float64, beta: np.float64):
     rounded_x = round(left_x)
     initial_value = rounded_x / upper_x
     expansion.binary_expansion(initial_value)
+
+
+def method_two(l: np.float64, alpha: np.float64, beta: np.float64) -> None:
+    print(f"l : {l}")
+    print(f"alpha : {alpha}")
+    print(f"beta : {beta}")
+    expansion.binary_expansion(float(alpha))
+    expansion.binary_expansion(float(beta))
 
 
 def __run__():
@@ -94,7 +102,10 @@ def __run__():
     """
     word = "could"
     l, alpha, beta = arithmetic_encoder(text, word)
+    print("Method 1")
     method_one(l, alpha, beta)
+    print("Method 2")
+    method_two(l, alpha, beta)
 
 
 if __name__ == "__main__":
