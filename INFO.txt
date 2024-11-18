@@ -1,0 +1,18 @@
+INFO
+21 a 25 de noviembre entrega de pia
+
+
+los campos de Galois no se deben programas
+sin embargo knuth y galaga si se tienen que programar
+
+
+Actividades a entregar
+1._ Información mutua y entropía
+2._ canales y métodos de acoplamiento termina nen arboles de sufijo
+3._ Metodos de codificación en huffman y termina en aritmética adaptativa
+4._ Diccionarios y detección de errores
+
+Expansión binaria por aparte
+
+
+

@@ -1,0 +1,6 @@
+detección y corrección de errores
+
+Codigos de Reed Solomon
+
+
+el proceso de Bernulli nos permite conocer cuantos dígitos binarios se tiene de errores en una cadena de caracteres
