@@ -1,14 +1,11 @@
-import collections
-
 import huffman
+import utils.utils as utils
 
-string = "Jos sä tahdot niin tullen kalioden läpi"
+text = "Jos sä tahdot niin tullen kalioden läpi"
 
-frequency = collections.Counter(string.replace(" ", "").lower())
+frequencies = utils.sort_and_order_frequencies(text)
 
-input_ = sorted(frequency.items(), key=lambda x: (-x[1], -ord(x[0])))
+output = huffman.codebook(frequencies)
 
-output = huffman.codebook(input_)
-
-print("Sorted :", input_)
+print("Sorted :", frequencies)
 print("Huffman :", output)
