@@ -1,3 +1,4 @@
+
 class LZ77Tuple:
     def __init__(self, offset, length, char):
         self.offset = offset
