@@ -1,77 +1,109 @@
-def compute_fingerprint_2gram(gram):
-    """
-    Calcula el fingerprint (huella digital) para un 2-gram, que es un entero
-    basado en los caracteres del alfabeto de aminoácidos.
-    """
-    # Mapeamos los aminoácidos a valores únicos. Utilizamos los 20 caracteres comunes en las secuencias de aminoácidos.
-    map_amino = {'A': 0, 'C': 1, 'D': 2, 'E': 3, 'F': 4, 'G': 5, 'H': 6, 'I': 7, 'K': 8, 'L': 9,
-                 'M': 10, 'N': 11, 'P': 12, 'Q': 13, 'R': 14, 'S': 15, 'T': 16, 'V': 17, 'W': 18, 'Y': 19}
-    fingerprint = 0
-    
-    for char in gram:
-        fingerprint = (fingerprint * 20) + map_amino[char]  # Multiplicamos por 20 para cada aminoácido
-    
-    return fingerprint
+import time
+from tkinter import filedialog
 
-def create_shift_table_BMH2(pattern):
-    """
-    Crea la tabla de desplazamientos basada en los fingerprints de los 2-grams del patrón.
-    """
-    m = len(pattern)
-    shift_table = {}
 
-    # Crear la tabla de desplazamientos para cada 2-gram
-    for i in range(m - 2):
-        qgram = pattern[i:i + 2]
-        fingerprint = compute_fingerprint_2gram(qgram)
-        shift_table[fingerprint] = m - i - 2
+def fingerprint(sequence: str) -> int:
+    """Calculate the fingerprint of a q-gram."""
+    r = {'A': 0, 'C': 1, 'D': 2, 'E': 3, 'F': 4, 'G': 5, 'H': 6, 'I': 7, 'K': 8, 'L': 9,
+         'M': 10, 'N': 11, 'P': 12, 'Q': 13, 'R': 14, 'S': 15, 'T': 16, 'V': 17, 'W': 18, 'Y': 19}
+    fp = 0
+    for i in range(len(sequence)):
+        if sequence[i] in r:
+            fp += r[sequence[i]] * (20 ** (len(sequence) - i - 1))
+    return fp
 
-    # Último 2-gram tiene desplazamiento 0
-    final_qgram = pattern[-2:]
-    shift_table[compute_fingerprint_2gram(final_qgram)] = 0
-    return shift_table
 
-def BMH2_search(text, pattern):
-    """
-    Realiza la búsqueda utilizando el algoritmo BMH2.
-    text: Texto en el cual buscar el patrón.
-    pattern: Patrón que estamos buscando.
-    """
-    n = len(text)
-    m = len(pattern)
+class BMH2:
 
-    if m < 2 or n < m:
-        return []
+    def __init__(self, pattern: str, text: str, q: int = 20):
+        self.pattern = pattern
+        self.text = text
+        self.q = q
 
-    # Crear la tabla de desplazamientos basada en los 2-grams
-    shift_table = create_shift_table_BMH2(pattern)
+        if len(pattern) < q:
+            raise ValueError("Pattern length must be greater than or equal to q.")
 
-    matches = []
-    s = 0  # Posición en el texto
+    def _initialize_shift_table(self) -> dict[int, int]:
+        """Initialize the shift table for the q-grams in the pattern."""
+        D = {}
+        m = len(self.pattern)
+        for i in range(m - self.q + 1):
+            q_gram = self.pattern[i:i + self.q]
+            fp = fingerprint(q_gram)
+            D[fp] = m - i - self.q
+        return D
 
-    while s <= n - m:
-        # Leer el último 2-gram del texto alineado con el patrón
-        qgram_text = text[s + m - 2:s + m]
-        fingerprint = compute_fingerprint_2gram(qgram_text)
+    def search(self) -> list[int]:
+        D = self._initialize_shift_table()
+        m = len(self.pattern)
+        n = len(self.text)
+        matches = []
 
-        # Obtener el desplazamiento correspondiente a este fingerprint
-        if fingerprint in shift_table:
-            shift_value = shift_table[fingerprint]
-        else:
-            shift_value = m
+        # Add stopper to the text
+        self.text += self.pattern
 
-        # Si hay coincidencia en los fingerprints, verificar todo el patrón
-        if shift_value == 0:
-            if text[s:s + m] == pattern:
-                matches.append(s)
-            shift_value = m  # Desplazar completamente si se encuentra una coincidencia
+        # Start searching
+        k = m
+        while k <= n:
+            q_gram = self.text[k - self.q:k]
+            fp = fingerprint(q_gram)
+            if fp in D:
+                shift = D[fp]
+            else:
+                shift = m  # Full shift if q-gram not in pattern
 
-        s += shift_value  # Desplazar la ventana de búsqueda
+            if shift == 0:  # Possible match found
+                # Verify the full pattern
+                if self.text[k - m:k] == self.pattern:
+                    matches.append(k - m)
+                shift = 1  # Avoid infinite loops for zero shift
 
-    return matches
+            k += shift
 
-# Ejemplo de uso
-text = "ACDEFGHIKLMNPQRSTVWYACDEFGHIK"
-pattern = "ACDEFG"
-resultados = BMH2_search(text, pattern)
-print("Patrón encontrado en las posiciones:", resultados)
+        return matches
+
+
+def test_bmh2_on_protein_file(filename: str, output_file: str):
+    # Read protein sequence from the input file
+    with open(filename, 'r') as file:
+        protein_sequence = file.read().replace("\n", "").upper()
+
+    # Open output file to store results
+    with open(output_file, 'w') as output:
+        output.write("Pattern Length\tTime (ms)\tMatches Found\n")
+
+        pattern_sequences = [4,6,8,10,12,14,16,18,20,22,24,26,28,30,40,50,60,70,80,90,100]
+        # Test patterns of lengths 4 to 40
+        for pattern_length in pattern_sequences:
+            pattern = protein_sequence[:pattern_length]
+
+            if len(pattern) < pattern_length:
+                break
+
+            bmh = BMH2(pattern, protein_sequence, q=min(20, len(pattern)))
+
+            start_time = time.time()
+            matches = bmh.search()
+            end_time = time.time()
+
+            elapsed_time_ms = (end_time - start_time) * 1000
+            output.write(f"{pattern_length}\t{elapsed_time_ms:.2f}\t{len(matches)}\n")
+
+            print(f"Pattern Length: {pattern_length}, Time: {elapsed_time_ms:.2f} ms, Matches Found: {len(matches)}")
+
+
+def main():
+    input_file = filedialog.askopenfilename(title="Select Aminoacid File", filetypes=[("Text Files", "*.txt")])
+    if not input_file:
+        print("No file selected. Exiting.")
+        return
+
+    output_file = "bmh2_aminoacid_test_results.txt"
+
+    test_bmh2_on_protein_file(input_file, output_file)
+
+    print(f"Test results saved to {output_file}")
+
+
+if __name__ == '__main__':
+    main()
