@@ -75,16 +75,13 @@ def test_bmh2_on_protein_file(filename: str, output_file: str):
         pattern_sequences = [4,6,8,10,12,14,16,18,20,22,24,26,28,30,40,50,60,70,80,90,100]
         # Test patterns of lengths 4 to 40
         for pattern_length in pattern_sequences:
-            # Generate a pattern of the desired length from the protein sequence
             pattern = protein_sequence[:pattern_length]
 
-            # Skip if the protein sequence is shorter than the pattern length
             if len(pattern) < pattern_length:
                 break
 
-            bmh = BMH2(pattern, protein_sequence)
+            bmh = BMH2(pattern, protein_sequence, q=min(20, len(pattern)))
 
-            # Measure execution time
             start_time = time.time()
             matches = bmh.search()
             end_time = time.time()
