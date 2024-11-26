@@ -93,16 +93,13 @@ def test_bmh2_on_protein_file(filename: str, output_file: str):
 
 
 def main():
-    # Ask user to select the input protein file
     input_file = filedialog.askopenfilename(title="Select Aminoacid File", filetypes=[("Text Files", "*.txt")])
     if not input_file:
         print("No file selected. Exiting.")
         return
 
-    # Output file for results
     output_file = "bmh2_aminoacid_test_results.txt"
 
-    # Perform the tests
     test_bmh2_on_protein_file(input_file, output_file)
 
     print(f"Test results saved to {output_file}")

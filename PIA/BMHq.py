@@ -94,16 +94,13 @@ def test_bmhq_on_dna_file(filename: str, output_file: str):
 
 
 def main():
-    # Ask user to select the input DNA file
     input_file = filedialog.askopenfilename(title="Select DNA File", filetypes=[("Text Files", "*.txt")])
     if not input_file:
         print("No file selected. Exiting.")
         return
 
-    # Output file for results
     output_file = "bmhq_dna_test_results.txt"
 
-    # Perform the tests
     test_bmhq_on_dna_file(input_file, output_file)
 
     print(f"Test results saved to {output_file}")
