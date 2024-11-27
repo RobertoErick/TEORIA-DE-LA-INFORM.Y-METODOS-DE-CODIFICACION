@@ -70,8 +70,10 @@ def method_two(l: np.float64, alpha: np.float64, beta: np.float64) -> None:
     print(f"l : {l}")
     print(f"alpha : {alpha}")
     print(f"beta : {beta}")
-    expansion.binary_expansion(float(alpha))
-    expansion.binary_expansion(float(beta))
+    a = expansion.binary_expansion(float(alpha))
+    b = expansion.binary_expansion(float(beta))
+    print(f"alpha {a}")
+    print(f"beta {b}")
 
 
 def __run__():
